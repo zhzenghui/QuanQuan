@@ -1,6 +1,6 @@
 
 
-set :application, "Yue-Site"
+set :application, "QuanQuan"
 set :stage, :production
 set :pty, true
 
