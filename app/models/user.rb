@@ -22,11 +22,7 @@ class User
   field :last_sign_in_at,    :type => Time
   field :current_sign_in_ip, :type => String
   field :last_sign_in_ip,    :type => String
-
-
-
-
-  field :name
+  
   ## Confirmable
   # field :confirmation_token,   :type => String
   # field :confirmed_at,         :type => Time
@@ -37,6 +33,25 @@ class User
   # field :failed_attempts, :type => Integer, :default => 0 # Only if lock strategy is :failed_attempts
   # field :unlock_token,    :type => String # Only if unlock strategy is :email or :both
   # field :locked_at,       :type => Time
+
+
+NOTIFICATION_PUSH_STATE = {
+    :allow => 1,
+    :not_allow => 0,
+  }
+NETWORK_TYPE_STATE = {
+    :g = 1,
+    :wifi = 2,
+  }  
+  # Quan的后添加
+  field :name
+  field :notifiction_push,    :type => Integer, :default => NOTIFICATION_PUSH_STATE[:allow]
+  field :loding_image_network,  :type => Integer, :defaule => NETWORK_TYPE_STATE[:g]
+  field :fans, :type => Array, :default => []
+
+
+  embeds_many :posts
+
 class << self
   def serialize_from_session(key, salt)
     record = to_adapter.get(key[0]["$oid"])
