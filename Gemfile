@@ -45,7 +45,7 @@ gem 'sidekiq'
 gem "mongoid", "4.0.0"
 # gem 'mongoid_auto_increment_id', "0.6.2"
 gem 'mongoid_rails_migrations', '1.0.0'
-
+gem 'bson_ext'
 
 # 七牛
 gem 'qiniu', '~> 6.2.1'

@@ -14,3 +14,10 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+*.css
+
+*.png
+
+*.gz
+
+public/assets
