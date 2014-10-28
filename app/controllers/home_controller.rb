@@ -3,7 +3,8 @@ class HomeController < ActionController::Base
   layout "application"
 
 	def index
-
+    current_user.name = "hari"
+    current_user.save
 	end 
 
 
