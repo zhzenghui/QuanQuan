@@ -3,8 +3,11 @@ class HomeController < ActionController::Base
   layout "application"
 
 	def index
-    current_user.name = "hari"
-    current_user.save
+
+    if current_user
+      current_user.name = "hari"
+      current_user.save
+    end 
 	end 
 
 
