@@ -34,30 +34,85 @@ class User
   # field :unlock_token,    :type => String # Only if unlock strategy is :email or :both
   # field :locked_at,       :type => Time
 
+  field :has_role,  :type => String
+  field :verified, type: Mongoid::Boolean, :default => false
+  field :state, type: Integer, default: 1
+  field :guest, type: Mongoid::Boolean, default: false
+  field :replies_count, type: Integer, default: 0
+  field :private_token
+  field :favorite_topic_ids, type: Array, default: []
+  field :location
+  field :location_id, type: Integer
 
-NOTIFICATION_PUSH_STATE = {
-    :allow => 1,
-    :not_allow => 0,
-  }
-NETWORK_TYPE_STATE = {
-    :g = 1,
-    :wifi = 2,
-  }  
+
+  index login: 1
+  index email: 1
+  index location: 1
+  index({private_token: 1},{ sparse: true })
+
+
   # Quan的后添加
   field :name
-  field :notifiction_push,    :type => Integer, :default => NOTIFICATION_PUSH_STATE[:allow]
-  field :loding_image_network,  :type => Integer, :defaule => NETWORK_TYPE_STATE[:g]
+  field :notifiction_push,    :type => Integer, :default => 0
+  # field :loding_image_network,  :type => Integer, :defaule => 0
   field :fans, :type => Array, :default => []
 
 
   embeds_many :posts
 
-class << self
-  def serialize_from_session(key, salt)
-    record = to_adapter.get(key[0]["$oid"])
-    record if record && record.authenticatable_salt == salt
+  class << self
+    def serialize_from_session(key, salt)
+      record = to_adapter.get(key[0]["$oid"])
+      record if record && record.authenticatable_salt == salt
+    end
   end
-end
+
+  def has_role?(role)
+
+    case role
+      when :admin then admin?
+      when :wiki_editor then wiki_editor?
+      when :site_editor then site_editor?
+      when :member then self.state == STATE[:normal]
+      else false
+    end
+  end
+
+  # 是否有 Wiki 维护权限
+  def wiki_editor?
+    self.admin? or self.verified == true
+  end
+
+  # 是否是管理员
+  def admin?
+    logger.info "admin =====================  admin"
+
+    Setting.admin_emails.include?(self.email)
+    
+  end
+
+
+
+  STATE = {
+    # 软删除
+    deleted: -1,
+    # 正常
+    normal: 1,
+    # 屏蔽
+    blocked: 2,
+  }
+
+
+
+  def blocked?
+    return self.state == STATE[:blocked]
+  end
+
+  def deleted?
+    return self.state == STATE[:deleted]
+  end
+
+
 
 
 end

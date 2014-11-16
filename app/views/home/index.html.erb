@@ -1,1 +1,26 @@
-test
+
+
+
+<% if signed_in? %>
+	
+	<% if current_user  %>
+		<%= current_user.name  %>
+	<% end %>
+
+	<p>
+	  <% if can? :update, current_user %>
+	  	upadate 
+	  <% end %>
+	  <% if can? :destroy, current_user %>
+	    destroy
+	  <% end %>
+	</p>
+
+
+
+<% end %>
+
+
+
+
+

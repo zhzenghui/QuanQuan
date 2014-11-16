@@ -6,6 +6,9 @@ class HomeController < ActionController::Base
 
     if current_user
       current_user.name = "hari"
+      current_user.has_role = "wiki_editor"
+      current_user.has_role = "admin"
+      
       current_user.save
     end 
 	end 
